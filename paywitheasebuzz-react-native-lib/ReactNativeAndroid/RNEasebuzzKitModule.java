@@ -1,4 +1,4 @@
-package com.easebuzz;  //replace this with your package name
+package com.easebuzz; //replace this with your package name
 
 import android.app.Activity;
 import android.content.Intent;
@@ -84,17 +84,17 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
       String result = "";
       String payment_response = "";
       JSONObject error_object = new JSONObject();
+      WritableMap responseMap = Arguments.createMap();
+
       try {
         error_object.put("error", "Exception");
         error_object.put("error_msg", e.toString());
-        payment_response = error_object.toString();
+        responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
       } catch (JSONException e1) {
-        payment_response = "Error in processing error JSON";
       }
 
       result = "payment_failed";
-      payment_response = "" + payment_response;
-      setPaymentResult(result, payment_response);
+      setPaymentResult(result, responseMap);
     }
   }
 
@@ -106,37 +106,38 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
       if (requestCode == StaticDataModel.PWE_REQUEST_CODE) {
         String result = "";
         String payment_response = "";
+         WritableMap responseMap = Arguments.createMap();
         JSONObject error_object = new JSONObject();
         if(data != null ) {
           result = data.getStringExtra("result");
           payment_response = data.getStringExtra("payment_response");
-
           try {
-            setPaymentResult(result, payment_response);
+            JSONObject responseObj = new JSONObject(payment_response);
+            responseMap  = EasebuzzUtility.jsonToWritableMap(responseObj);
+            setPaymentResult(result, responseMap);
+
           }catch (Exception e){
             try {
               error_object.put("error", "Exception");
               error_object.put("error_msg", e.toString());
-              payment_response = error_object.toString();
+              responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
             } catch (JSONException e1) {
-              payment_response = "Error in processing error JSON";
             }
 
             result = "payment_failed";
             payment_response = "" + payment_response;
-            setPaymentResult(result, payment_response);
+            setPaymentResult(result, responseMap);
           }
 
         }else{
           try {
             error_object.put("error", "No Response");
             error_object.put("error_msg", "Could not receive the response from easebuzz");
-            payment_response = error_object.toString();
+            responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
           } catch (JSONException e1) {
-            payment_response = "Empty Response : Error in processing error JSON ";
           }
           result = "payment_failed";
-          setPaymentResult(result, payment_response);
+          setPaymentResult(result, responseMap);
         }
 
       }else
@@ -155,10 +156,10 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
 
   };
 
-  private void setPaymentResult(String result, String response) {
+  private void setPaymentResult(String result, WritableMap response) {
     WritableMap params = Arguments.createMap();
     params.putString("result", result);
-    params.putString("payment_response", response);
+    params.putMap("payment_response", response);
     sendPaymentResult(getReactApplicationContext(), "EasebuzzPaymentResultEvent", params);
 
 
