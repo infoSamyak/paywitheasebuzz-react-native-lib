@@ -76,7 +76,7 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
       intentProceed.putExtra("trxn_country",parametersJSON.optString("country")); 
       intentProceed.putExtra("trxn_zipcode",parametersJSON.optString("zipcode")); 
       intentProceed.putExtra("pay_mode",parametersJSON.optString("pay_mode")); 
-      intentProceed.putExtra("trxn_salt",parametersJSON.optString("salt")); 
+      intentProceed.putExtra("hash",parametersJSON.optString("hash")); 
       intentProceed.putExtra("unique_id",parametersJSON.optString("unique_id")); 
       intentProceed.putExtra("sub_merchant_id",parametersJSON.optString("sub_merchant_id")); 
       currentActivity.startActivityForResult(intentProceed, StaticDataModel.PWE_REQUEST_CODE);
