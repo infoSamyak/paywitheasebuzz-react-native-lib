@@ -4,7 +4,7 @@ package com.easebuzz;
 
 import android.app.Activity;
 import android.content.Intent;
-
+import android.widget.Toast;
 import com.easebuzz.payment.kit.PWECouponsActivity;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
@@ -27,7 +27,7 @@ import datamodels.StaticDataModel;
 
 public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
 
-  private final ReactApplicationContext reactContext;
+  public final ReactApplicationContext reactContext;
 
   public RNEasebuzzKitModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -77,7 +77,10 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
       intentProceed.putExtra("hash",parametersJSON.optString("hash")); 
       intentProceed.putExtra("unique_id",parametersJSON.optString("unique_id")); 
       intentProceed.putExtra("sub_merchant_id",parametersJSON.optString("sub_merchant_id")); 
-      intentProceed.putExtra("split_payments",parametersJSON.optString("split_payments"));
+      if(parametersJSON.has("split_payments"))
+      {
+        intentProceed.putExtra("split_payments",parametersJSON.optString("split_payments"));
+      }
 
       currentActivity.startActivityForResult(intentProceed, StaticDataModel.PWE_REQUEST_CODE);
 
@@ -120,8 +123,8 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
 
           }catch (Exception e){
             try {
-              error_object.put("error", "Exception");
-              error_object.put("error_msg", e.toString());
+              error_object.put("error", payment_response);
+              error_object.put("error_msg", payment_response);
               responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
             } catch (JSONException e1) {
             }
