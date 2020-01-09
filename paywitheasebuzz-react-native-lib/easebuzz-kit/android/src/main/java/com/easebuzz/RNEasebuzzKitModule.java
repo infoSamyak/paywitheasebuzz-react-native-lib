@@ -49,7 +49,7 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
     Activity currentActivity = getCurrentActivity();
     try {
       Intent intentProceed = new Intent(currentActivity, PWECouponsActivity.class);
-      float amount = Float.parseFloat(parametersJSON.optString("amount"));
+      Double amount = new Double(parametersJSON.optString("amount"));
       intentProceed.putExtra("txnid",parametersJSON.optString("txnid")); 
       intentProceed.putExtra("amount",amount); 
       intentProceed.putExtra("productinfo",parametersJSON.optString("productinfo")); 
@@ -108,47 +108,51 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-      if (requestCode == StaticDataModel.PWE_REQUEST_CODE) {
-        String result = "";
-        String payment_response = "";
-         WritableMap responseMap = Arguments.createMap();
-        JSONObject error_object = new JSONObject();
-        if(data != null ) {
-          result = data.getStringExtra("result");
-          payment_response = data.getStringExtra("payment_response");
-          try {
-            JSONObject responseObj = new JSONObject(payment_response);
-            responseMap  = EasebuzzUtility.jsonToWritableMap(responseObj);
-            setPaymentResult(result, responseMap);
-
-          }catch (Exception e){
+      if(data != null ) {
+        if (requestCode == StaticDataModel.PWE_REQUEST_CODE) {
+          String result = "";
+          String payment_response = "";
+           WritableMap responseMap = Arguments.createMap();
+          JSONObject error_object = new JSONObject();
+          if(data != null ) {
+            result = data.getStringExtra("result");
+            payment_response = data.getStringExtra("payment_response");
             try {
-              error_object.put("error", payment_response);
-              error_object.put("error_msg", payment_response);
+              JSONObject responseObj = new JSONObject(payment_response);
+              responseMap  = EasebuzzUtility.jsonToWritableMap(responseObj);
+              setPaymentResult(result, responseMap);
+  
+            }catch (Exception e){
+              try {
+                error_object.put("error", payment_response);
+                error_object.put("error_msg", payment_response);
+                responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
+              } catch (JSONException e1) {
+              }
+  
+              result = "payment_failed";
+              payment_response = "" + payment_response;
+              setPaymentResult(result, responseMap);
+            }
+  
+          }else{
+            try {
+              error_object.put("error", "No Response");
+              error_object.put("error_msg", "Could not receive the response from easebuzz");
               responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
             } catch (JSONException e1) {
             }
-
             result = "payment_failed";
-            payment_response = "" + payment_response;
             setPaymentResult(result, responseMap);
           }
-
-        }else{
-          try {
-            error_object.put("error", "No Response");
-            error_object.put("error_msg", "Could not receive the response from easebuzz");
-            responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
-          } catch (JSONException e1) {
-          }
-          result = "payment_failed";
-          setPaymentResult(result, responseMap);
+  
+        }else
+        {
+          onActivityResult(activity, requestCode, resultCode, data);
         }
 
-      }else
-      {
-        onActivityResult(activity, requestCode, resultCode, data);
       }
+
     }
 
     @Override
