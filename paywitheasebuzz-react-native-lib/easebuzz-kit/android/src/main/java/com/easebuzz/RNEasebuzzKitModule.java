@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 
-import datamodels.StaticDataModel;
+import datamodels.PWEStaticDataModel;
 
 public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
 
@@ -82,7 +82,7 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
         intentProceed.putExtra("split_payments",parametersJSON.optString("split_payments"));
       }
 
-      currentActivity.startActivityForResult(intentProceed, StaticDataModel.PWE_REQUEST_CODE);
+      currentActivity.startActivityForResult(intentProceed, PWEStaticDataModel.PWE_REQUEST_CODE);
 
 
     } catch (Exception e) {
@@ -109,7 +109,7 @@ public class RNEasebuzzKitModule extends ReactContextBaseJavaModule {
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
       if(data != null ) {
-        if (requestCode == StaticDataModel.PWE_REQUEST_CODE) {
+        if (requestCode == PWEStaticDataModel.PWE_REQUEST_CODE) {
           String result = "";
           String payment_response = "";
            WritableMap responseMap = Arguments.createMap();
