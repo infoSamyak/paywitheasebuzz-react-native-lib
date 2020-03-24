@@ -3,9 +3,12 @@ React-Native integration kit for pay with easebuzz
 
 ## Installing SDK:
 Run the below commands to install sdk into your project.
-1.1 npm install $(npm pack <Path of React Native SDK>/easebuzz-kit | tail -1)
-       Example : npm install $(npm pack HomeDirectory/SDKfolder/easebuzz-kit | tail -1)
-1.2. react-native link react-native-easebuzz-kit
+
+1.  npm install $(npm pack <Path of React Native SDK>/easebuzz-kit | tail -1)
+       
+    Example : npm install $(npm pack HomeDirectory/SDKfolder/easebuzz-kit | tail -1)
+    
+2.  react-native link react-native-easebuzz-kit
 
 ## Steps:
 1. iOS setup
