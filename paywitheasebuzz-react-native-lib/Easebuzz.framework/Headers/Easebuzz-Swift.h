@@ -253,7 +253,7 @@ SWIFT_PROTOCOL("_TtP8Easebuzz23PayWithEasebuzzCallback_")
 
 SWIFT_CLASS("_TtC8Easebuzz7Payment")
 @interface Payment : NSObject
-- (nonnull instancetype)initWithCustomerData:(NSDictionary<NSString *, NSString *> * _Nonnull)customerData OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithCustomerData:(NSDictionary<NSString *, id> * _Nonnull)customerData OBJC_DESIGNATED_INITIALIZER;
 - (BOOL)isValid SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
@@ -598,7 +598,7 @@ SWIFT_PROTOCOL("_TtP8Easebuzz23PayWithEasebuzzCallback_")
 
 SWIFT_CLASS("_TtC8Easebuzz7Payment")
 @interface Payment : NSObject
-- (nonnull instancetype)initWithCustomerData:(NSDictionary<NSString *, NSString *> * _Nonnull)customerData OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithCustomerData:(NSDictionary<NSString *, id> * _Nonnull)customerData OBJC_DESIGNATED_INITIALIZER;
 - (BOOL)isValid SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
