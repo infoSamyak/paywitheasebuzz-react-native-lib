@@ -56,18 +56,9 @@ public class EasebuzzKitModule extends ReactContextBaseJavaModule {
                 String value = "";
                 String key = (String) keys.next();
                 value = parametersJSON.optString(key);
-
-                if (key.equals("amount")){
-                    Double amount = new Double(parametersJSON.optString("amount"));
-                    intentProceed.putExtra(key,amount);
-                }
-                else {
-                    intentProceed.putExtra(key,value);
-                }
+                intentProceed.putExtra(key,value);
             }
             currentActivity.startActivityForResult(intentProceed, PWEStaticDataModel.PWE_REQUEST_CODE);
-
-
         } catch (Exception e) {
             String result = "";
             String payment_response = "";

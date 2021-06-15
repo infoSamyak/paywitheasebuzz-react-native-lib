@@ -27,41 +27,20 @@ Call EasebuzzCheckout.open method with the payment request parameters as options
 
  ```
 const callPaymentGateway  = () => {
-var options = {
-txnid: 'UNIQUE_TRANSACTION_ID',
-amount: 'Transaction amount in string as double format',
-productinfo: 'Product Information',
-firstname: 'Customer First Name',
-email: "customer@gmail.com",
-phone: "customer phone number",
-key: "YOUR_MERCHANT_KEY",
-udf1: "",
-udf2: "",
-udf3: "",
-udf4: "",
-udf5: "",
-s_url: "http://your.successurl.in",
-f_url: "http://your.failureurl.in",
-address1: "customer address 1",
-address2: "customer address 2",
-city: "customer city",
-state: "customer state",
-country: "customer country",
-zipcode: "customer zipcode",
-unique_id: "Customers unique ID only for save card feature otherwise pass empty",
-pay_mode: "This can be “test” or “production",
-hash: "Create hash using following procedure in hash generation section"
-}
+  var options = {
+    access_key: "Access key",
+    pay_mode: "This can be “test” or “production"
+  }
 
-EasebuzzCheckout.open(options).then((data) => {
-//handle the payment success & failed response here
-console.log("Payment Response:") 
-console.log(data);
-}).catch((error) => {
-//handle sdk failure issue here
-console.log("SDK Error:")
-console.log(error);
-});
+  EasebuzzCheckout.open(options).then((data) => {
+    //handle the payment success & failed response here
+    console.log("Payment Response:") 
+    console.log(data);
+  }).catch((error) => {
+    //handle sdk failure issue here
+    console.log("SDK Error:")
+    console.log(error);
+  });
 }
 
  ```
