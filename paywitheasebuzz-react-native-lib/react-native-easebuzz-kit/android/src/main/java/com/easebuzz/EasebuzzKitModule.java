@@ -10,6 +10,8 @@ import android.content.Intent;
 
 import com.easebuzz.payment.kit.PWECouponsActivity;
 import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.bridge.ActivityEventListener;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -28,14 +30,15 @@ import java.util.Iterator;
 
 import datamodels.PWEStaticDataModel;
 
-public class EasebuzzKitModule extends ReactContextBaseJavaModule {
+public class EasebuzzKitModule extends ReactContextBaseJavaModule implements ActivityEventListener{
 
     private final ReactApplicationContext reactContext;
 
     public EasebuzzKitModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        reactContext.addActivityEventListener(easebuzzActivityEventListener);
+        reactContext.addActivityEventListener(this);
+
     }
 
     @Override
@@ -99,54 +102,52 @@ public class EasebuzzKitModule extends ReactContextBaseJavaModule {
                 .emit(eventName, params);
     }
 
-    private final ActivityEventListener easebuzzActivityEventListener = new ActivityEventListener() {
+    public void onNewIntent(Intent intent) {}
 
-        @Override
-        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-            if(data != null ) {
-                if (requestCode == PWEStaticDataModel.PWE_REQUEST_CODE) {
-                    String result = "";
-                    String payment_response = "";
-                    WritableMap responseMap = Arguments.createMap();
-                    JSONObject error_object = new JSONObject();
-                    if(data != null ) {
-                        result = data.getStringExtra("result");
-                        payment_response = data.getStringExtra("payment_response");
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data != null ) {
+            if (requestCode == PWEStaticDataModel.PWE_REQUEST_CODE) {
+                String result = "";
+                String payment_response = "";
+                WritableMap responseMap = Arguments.createMap();
+                JSONObject error_object = new JSONObject();
+                if(data != null ) {
+                    result = data.getStringExtra("result");
+                    payment_response = data.getStringExtra("payment_response");
+                    try {
+                        JSONObject responseObj = new JSONObject(payment_response);
+                        responseMap  = EasebuzzUtility.jsonToWritableMap(responseObj);
+                        setPaymentResult(result, responseMap);
+
+                    }catch (Exception e){
                         try {
-                            JSONObject responseObj = new JSONObject(payment_response);
-                            responseMap  = EasebuzzUtility.jsonToWritableMap(responseObj);
-                            setPaymentResult(result, responseMap);
-
-                        }catch (Exception e){
-                            try {
-                                error_object.put("error", payment_response);
-                                error_object.put("error_msg", payment_response);
-                                responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
-                            } catch (JSONException e1) {
-                            }
-
-                            result = "payment_failed";
-                            payment_response = "" + payment_response;
-                            setPaymentResult(result, responseMap);
-                        }
-
-                    }else{
-                        try {
-                            error_object.put("error", "No Response");
-                            error_object.put("error_msg", "Could not receive the response from easebuzz");
+                            error_object.put("error", payment_response);
+                            error_object.put("error_msg", payment_response);
                             responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
                         } catch (JSONException e1) {
                         }
+
                         result = "payment_failed";
+                        payment_response = "" + payment_response;
                         setPaymentResult(result, responseMap);
                     }
+
+                }else{
+                    try {
+                        error_object.put("error", "No Response");
+                        error_object.put("error_msg", "Could not receive the response from easebuzz");
+                        responseMap  = EasebuzzUtility.jsonToWritableMap(error_object);
+                    } catch (JSONException e1) {
+                    }
+                    result = "payment_failed";
+                    setPaymentResult(result, responseMap);
                 }
             }
         }
-
-        @Override
-        public void onNewIntent(Intent intent) {
-
-        }
-    };
+    }
 }
