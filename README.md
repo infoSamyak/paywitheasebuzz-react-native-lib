@@ -1,53 +1,43 @@
-# paywitheasebuzz-react-native-lib
+# react-native-easebuzz-kit
 
-## For More description of iOS and Android setup refer below link
+## Getting started
 
-https://github.com/easebuzz/paywitheasebuzz-react-native-lib/blob/master/paywitheasebuzz-react-native-lib/documentation.pdf
+`$ npm install react-native-easebuzz-kit --save`
 
+### Mostly automatic installation
 
-## React Native Integration Code (Java Script):
+`$ react-native link react-native-easebuzz-kit`
 
-1.0 Write below JavaScript Code to Start Payment using Easebuzz Payment Gateway
-
-
-1.1 Import following components 
- ```
-import {Platform, Button, NativeModules,NativeEventEmitter} from 'react-native';
- ```
-
-1.2 Import EasebuzzCheckout module to your component:
-  ```
-     import EasebuzzCheckout from 'react-native-easebuzz-kit';
- ```
-
-1.3 Write below code in Call Payment Menthod.
-
-Call EasebuzzCheckout.open method with the payment request parameters as options. This method returns a JS Promise where then part corresponds to a successful payment response or failure response and the catch part corresponds to any sdk failure i.e event failed etc.
+### Manual installation
 
 
- ```
-const callPaymentGateway  = () => {
-  var options = {
-    access_key: "Access key",
-    pay_mode: "This can be “test” or “production"
-  }
+#### iOS
 
-  EasebuzzCheckout.open(options).then((data) => {
-    //handle the payment success & failed response here
-    console.log("Payment Response:") 
-    console.log(data);
-  }).catch((error) => {
-    //handle sdk failure issue here
-    console.log("SDK Error:")
-    console.log(error);
-  });
-}
+1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+2. Go to `node_modules` ➜ `react-native-easebuzz-kit` and add `EasebuzzKit.xcodeproj`
+3. In XCode, in the project navigator, select your project. Add `libEasebuzzKit.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+4. Run your project (`Cmd+R`)<
 
- ```
-## For More description of request and Response refer below link.
+#### Android
 
-https://docs.easebuzz.in/mobile-integration-react-native/handle-response
+1. Open up `android/app/src/main/java/[...]/MainApplication.java`
+  - Add `import com.reactlibrary.EasebuzzKitPackage;` to the imports at the top of the file
+  - Add `new EasebuzzKitPackage()` to the list returned by the `getPackages()` method
+2. Append the following lines to `android/settings.gradle`:
+  	```
+  	include ':react-native-easebuzz-kit'
+  	project(':react-native-easebuzz-kit').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-easebuzz-kit/android')
+  	```
+3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+  	```
+      compile project(':react-native-easebuzz-kit')
+  	```
 
-## For More description of Android and iOS setup refer below link.
 
-https://docs.easebuzz.in/mobile-integration-react-native
+## Usage
+```javascript
+import EasebuzzCheckout from 'react-native-easebuzz-kit';
+
+// TODO: What to do with the module?
+EasebuzzKit;
+```
